@@ -40,7 +40,7 @@ exports.signIn= async(req,res)=>{
 
     try {
         const api_key= process.env.apiKey
-        const response= await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {email,password,returnSecuretoken:true})
+        const response= await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`, {email,password,returnSecuretoken:true})
         res.json({
             uid: response.data.localId,
             email:response.data.email,
