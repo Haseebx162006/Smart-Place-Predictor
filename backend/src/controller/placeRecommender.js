@@ -1,17 +1,20 @@
 const axios = require('axios');
 
-const placesToTags= {
-    happy:['park','cafe','restaurant',],
-    sad:['cinema','park','mosque',],
-    angry:['gym','boxing club','stadium',],
-    neutral:['library','cafe','museum','park']
+
+const placesToTags = {
+  happy: ['park', 'cafe'],
+  sad: ['park', 'place_of_worship'],
+  angry: ['gym', 'fitness_centre'],
+  neutral: ['restaurant']
 }
 
-exports.recommendPlaces= async(emotion,lat,lng)=>{
-    const tags=placesToTags[emotion] 
-    const radius= 10000
-    const results= []
-    for (const tag of tags) {
+exports.recommendPlaces = async (emotion, lat, lng) => {
+
+
+  const tags = placesToTags[emotion]
+  const radius = 10000
+  const results = []
+  for (const tag of tags) {
     const query = `
       [out:json];
       (
@@ -29,11 +32,15 @@ exports.recommendPlaces= async(emotion,lat,lng)=>{
 
     results.push(...response.data.elements)
   }
-  return results.slice(0, 5).map(place => ({
+  const places = results.slice(0, 5).map(place => ({
     name: place.tags?.name || "Unnamed place",
     category: place.tags?.amenity || "unknown",
     lat: place.lat || place.center?.lat,
     lng: place.lon || place.center?.lon,
     mapLink: `https://www.openstreetmap.org/?mlat=${place.lat || place.center?.lat}&mlon=${place.lon || place.center?.lon}`
   }))
+
+
+
+  return places;
 }
