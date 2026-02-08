@@ -5,16 +5,15 @@ const fs= require('fs')
 
 exports.emotionDetector= async(req,res)=>{
     // multer store pic on disk so
-
     try {
         const imagePath= req.file.path
 
         const form = new FormData()
 
-        form.append("image",fs.createReadStream(fs))
+        form.append("image",fs.createReadStream(imagePath))
 
         const response= await axios.post("http://emotion-ml:8000/predict", form, {headers:form.getHeaders()}  )
-        const {emotion,confidence}= response.body
+        const {emotion,confidence}= response.data   
 
         if(confidence<0.5){
             return res.json({
