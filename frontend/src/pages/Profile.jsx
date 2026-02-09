@@ -7,51 +7,60 @@ const Profile = () => {
     const { user } = useAuth();
 
     const sections = [
-        { name: 'Security Protocol', icon: Shield, desc: 'Manage access keys and biometric privacy.' },
-        { name: 'Network Alerts', icon: Bell, desc: 'Configure sentient response notifications.' },
-        { name: 'Studio Prefs', icon: AppWindow, desc: 'Customize your discovery interface.' },
+        { name: 'Security', icon: Shield, desc: 'Manage access keys and privacy.' },
+        { name: 'Alerts', icon: Bell, desc: 'Configure notifications.' },
+        { name: 'Preferences', icon: AppWindow, desc: 'Customize your interface.' },
     ];
 
     return (
-        <div className="space-y-16">
-            <div className="flex flex-col md:flex-row items-center gap-12">
-                <div className="w-32 h-32 rounded-[3.5rem] bg-indigo-600 flex items-center justify-center text-white text-5xl font-black italic shadow-2xl shadow-indigo-600/30">
+        <div className="space-y-8">
+            {/* Profile Header */}
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
+                {/* Avatar - Square brutalist style */}
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-primary flex items-center justify-center text-white text-3xl md:text-4xl font-black border-4 border-black shadow-[6px_6px_0px_#000]">
                     {user?.name?.charAt(0).toUpperCase()}
                 </div>
+                {/* User Info */}
                 <div className="text-center md:text-left">
-                    <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.5em] mb-4 block">Biological ID</span>
-                    <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none italic uppercase mb-2">{user?.name}</h1>
-                    <p className="text-xl text-slate-400 font-bold tracking-tighter uppercase italic">{user?.email}</p>
+                    <span className="label-text text-primary mb-2 block">Biological ID</span>
+                    <h1 className="heading-lg mb-1">{user?.name}</h1>
+                    <p className="text-sm md:text-base text-slate-400 font-bold tracking-tight uppercase">{user?.email}</p>
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            {/* Settings Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {sections.map((section, i) => (
                     <motion.div
                         key={section.name}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className="p-10 bg-white border border-slate-100 rounded-[3rem] shadow-premium hover:shadow-2xl transition-all group"
+                        className="bento-card bento-card-hover p-6 md:p-8 cursor-pointer"
                     >
-                        <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
-                            <section.icon className="w-8 h-8" />
+                        <div className="w-12 h-12 md:w-14 md:h-14 bg-slate-50 border-4 border-black flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                            <section.icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4 leading-none">{section.name}</h3>
-                        <p className="text-sm font-bold text-slate-400 leading-tight tracking-tighter italic uppercase">{section.desc}</p>
+                        <h3 className="text-lg md:text-xl font-black text-black uppercase tracking-tighter mb-2 leading-none">{section.name}</h3>
+                        <p className="text-[10px] md:text-xs font-bold text-slate-400 leading-tight tracking-tight uppercase">{section.desc}</p>
                     </motion.div>
                 ))}
             </div>
 
-            <div className="p-12 bg-slate-900 rounded-[3.5rem] text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-12 opacity-10">
-                    <UserIcon className="w-40 h-40" />
+            {/* Danger Zone */}
+            <div className="bento-card bg-black text-white p-6 md:p-10 relative overflow-hidden">
+                {/* Background Icon */}
+                <div className="absolute top-0 right-0 p-8 opacity-10">
+                    <UserIcon className="w-24 h-24 md:w-32 md:h-32" />
                 </div>
-                <div className="relative z-10 max-w-xl">
-                    <h2 className="text-4xl font-black tracking-tighter uppercase italic mb-6">Terminate Identity</h2>
-                    <p className="text-white/40 font-bold uppercase tracking-widest mb-10 text-sm leading-tight">Delete your profile and all associated sentient metadata from the SmartPlace core. This action is immutable.</p>
-                    <button className="px-10 py-5 bg-rose-600 text-white rounded-[1.5rem] font-black uppercase tracking-widest hover:bg-rose-700 transition-all active:scale-95">
-                        Destroy Profile
+                {/* Content */}
+                <div className="relative z-10 max-w-md">
+                    <h2 className="text-2xl md:text-3xl font-black tracking-tighter uppercase mb-4">Terminate Identity</h2>
+                    <p className="text-white/40 font-bold uppercase tracking-wide mb-6 text-[10px] md:text-xs leading-relaxed">
+                        Delete your profile and all associated data. This action is irreversible.
+                    </p>
+                    <button className="px-6 py-3 md:px-8 md:py-4 bg-red-500 text-white border-4 border-white font-black uppercase tracking-widest text-[10px] md:text-xs hover:bg-red-600 transition-all shadow-[4px_4px_0px_#fff] active:shadow-none active:translate-x-1 active:translate-y-1">
+                        Delete Profile
                     </button>
                 </div>
             </div>

@@ -47,3 +47,4 @@ frontend/build/
 # Coverage
 # =========================
 coverage/
+.agent/skills/fronted-skill/

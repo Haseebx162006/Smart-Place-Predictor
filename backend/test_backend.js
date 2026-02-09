@@ -1,49 +1,35 @@
-require('dotenv').config();
-const admin = require('firebase-admin');
-const mongoose = require('mongoose');
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
 
-console.log("1. Environment Variables Loaded");
-console.log("   PORT:", process.env.PORT);
-console.log("   DB_URL:", process.env.DB_URL);
-console.log("   Project ID:", process.env.project_id);
+async function testBackend() {
+    const url = 'http://localhost:3000/api/emotion/detect';
+    // Use an existing image from the uploads folder for testing
+    const imagePath = 'm:\\Smart-Predictor\\code\\backend\\uploads\\1770581649109.jpg';
 
-async function testFirebase() {
-    console.log("\n2. Testing Firebase Initialization...");
+    const form = new FormData();
+    form.append('image', fs.createReadStream(imagePath));
+    form.append('lat', '33.6844');
+    form.append('lng', '73.0479');
+
+    console.log("Sending request to backend...");
     try {
-        const serviceAccount = {
-            projectId: process.env.project_id,
-            clientEmail: process.env.client_email,
-            privateKey: process.env.private_key ? process.env.private_key.replace(/\\n/g, "\n") : undefined
-        };
-
-        if (!serviceAccount.privateKey) {
-            throw new Error("Private key is missing in .env");
-        }
-
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount)
+        const response = await axios.post(url, form, {
+            headers: {
+                ...form.getHeaders()
+            }
         });
-        console.log("   ✅ Firebase Initialized Successfully");
+        console.log("Response Status:", response.status);
+        console.log("Response Data:", JSON.stringify(response.data, null, 2));
     } catch (error) {
-        console.error("   ❌ Firebase Failed:", error.message);
+        console.error("Test Failed!");
+        if (error.response) {
+            console.error("Status:", error.response.status);
+            console.error("Data:", error.response.data);
+        } else {
+            console.error("Error:", error.message);
+        }
     }
 }
 
-async function testMongo() {
-    console.log("\n3. Testing MongoDB Connection...");
-    try {
-        await mongoose.connect(process.env.DB_URL);
-        console.log("   ✅ MongoDB Connected Successfully");
-        await mongoose.disconnect();
-    } catch (error) {
-        console.error("   ❌ MongoDB Failed:", error.message);
-    }
-}
-
-async function run() {
-    await testFirebase();
-    await testMongo();
-    console.log("\nTest Complete.");
-}
-
-run();
+testBackend();

@@ -30,4 +30,8 @@ export const emotionAPI = {
     }),
 };
 
+export const historyAPI = {
+    getHistory: () => api.get('/history'),
+};
+
 export default api;

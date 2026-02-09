@@ -1,5 +1,6 @@
 const auth_routes = require('./src/routes/auth_routes')
 const emotion_routes = require('./src/routes/emotion_routes')
+const history_routes = require('./src/routes/history_routes')
 const express = require('express')
 const app = express()
 
@@ -12,6 +13,7 @@ app.get('/get', (req, res) => {
 })
 app.use("/api/auth", auth_routes)
 app.use("/api/emotion", emotion_routes)
+app.use("/api/history", history_routes)
 
 
 module.exports = app
